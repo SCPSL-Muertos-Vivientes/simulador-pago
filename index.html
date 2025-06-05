@@ -1,136 +1,155 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Pagar</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .container {
-      background: white;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      text-align: center;
-      width: 300px;
-      transition: all 0.4s ease;
-    }
-    h2 {
-      margin-bottom: 1rem;
-    }
-    .options button {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 10px;
-      width: 100%;
-      margin: 0.5rem 0;
-      padding: 10px;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      background: #f9f9f9;
-      cursor: pointer;
-      transition: 0.2s;
-      font-size: 16px;
-    }
-    .options button.selected {
-      border-color: #4CAF50;
-      background: #e6f7e9;
-    }
-    .options button:hover {
-      background: #f0f0f0;
-    }
-    .next-btn {
-      margin-top: 1rem;
-      padding: 10px 20px;
-      font-size: 16px;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .hidden {
-      display: none;
-    }
-    .loader {
-      border: 6px solid #f3f3f3;
-      border-top: 6px solid #4CAF50;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    .success-icon {
-      font-size: 48px;
-      color: #4CAF50;
-      margin-bottom: 10px;
-    }
-  </style>
-</head>
-<body>
-  <div class="container" id="payment-step">
-    <h2>¿Amb que vols pagar?</h2>
-    <div class="options" id="options">
-      <button data-method="PayPal"><i class="fab fa-paypal"></i> PayPal</button>
-      <button data-method="Tarjeta"><i class="fas fa-credit-card"></i> Tarjeta</button>
-      <button data-method="Apple Pay"><i class="fab fa-apple-pay"></i> Apple Pay</button>
-    </div>
-    <button class="next-btn" id="nextBtn" disabled>Siguiente</button>
-  </div>
-
-  <div class="container hidden" id="loading-step">
-    <div class="loader"></div>
-    <p>Procesant pagament...</p>
-  </div>
-
-  <div class="container hidden" id="success-step">
-    <div class="success-icon"><i class="fas fa-check-circle"></i></div>
-    <h2>¡Pagament realitzat!</h2>
-    <p>Gracies per la teva compra.</p>
-  </div>
-  <script>
-  const buttons = document.querySelectorAll(".options button");
-  const nextBtn = document.getElementById("nextBtn");
-  let selectedMethod = null;
-
-  buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      buttons.forEach(b => b.classList.remove("selected"));
-      btn.classList.add("selected");
-      selectedMethod = btn.dataset.method;
-      nextBtn.disabled = false;
-    });
-  });
-
-  nextBtn.addEventListener("click", () => {
-    document.getElementById("payment-step").classList.add("hidden");
-    document.getElementById("loading-step").classList.remove("hidden");
-
-    setTimeout(() => {
-      document.getElementById("loading-step").classList.add("hidden");
-      document.getElementById("success-step").classList.remove("hidden");
-
-      // Espera 5 segundos y luego envía mensaje a App Inventor
-      setTimeout(() => {
-        if (window.AppInventor) {
-          window.AppInventor.setWebViewString("pago_completado");
+    <meta charset="UTF-8">
+    <title>Pagar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
         }
-      }, 5000);
-    }, 2500);
-  });
-  </script>
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+            transition: all 0.4s ease;
+        }
+
+        h2 {
+            margin-bottom: 1rem;
+        }
+
+        .options button {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            width: 100%;
+            margin: 0.5rem 0;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background: #f9f9f9;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 16px;
+        }
+
+        .options button.selected {
+            border-color: #4CAF50;
+            background: #e6f7e9;
+        }
+
+        .options button:hover {
+            background: #f0f0f0;
+        }
+
+        .next-btn {
+            margin-top: 1rem;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #4CAF50;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .success-icon {
+            font-size: 48px;
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="payment-step">
+        <h2>¿Amb que vols pagar?</h2>
+        <div class="options" id="options">
+            <button data-method="PayPal"><i class="fab fa-paypal"></i> PayPal</button>
+            <button data-method="Tarjeta"><i class="fas fa-credit-card"></i> Tarjeta</button>
+            <button data-method="Apple Pay"><i class="fab fa-apple-pay"></i> Apple Pay</button>
+        </div>
+        <button class="next-btn" id="nextBtn" disabled>Siguiente</button>
+    </div>
+
+    <div class="container hidden" id="loading-step">
+        <div class="loader"></div>
+        <p>Procesant pagament...</p>
+    </div>
+
+    <div class="container hidden" id="success-step">
+        <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+        <h2>¡Pagament realitzat!</h2>
+        <p>Gracies per la teva compra.</p>
+    </div>
+    <script>
+        const buttons = document.querySelectorAll(".options button");
+        const nextBtn = document.getElementById("nextBtn");
+        let selectedMethod = null;
+
+        buttons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                buttons.forEach(b => b.classList.remove("selected"));
+                btn.classList.add("selected");
+                selectedMethod = btn.dataset.method;
+                nextBtn.disabled = false;
+            });
+        });
+
+        nextBtn.addEventListener("click", () => {
+            document.getElementById("payment-step").classList.add("hidden");
+            document.getElementById("loading-step").classList.remove("hidden");
+
+            setTimeout(() => {
+                document.getElementById("loading-step").classList.add("hidden");
+                document.getElementById("success-step").classList.remove("hidden");
+
+                // Espera 5 segundos y luego envía mensaje a App Inventor
+                setTimeout(() => {
+                    console.log("Intentando enviar mensaje a AppInventor...");
+                    if (typeof window.AppInventor !== "undefined" && window.AppInventor.setWebViewString) {
+                        window.AppInventor.setWebViewString("pago_completado");
+                        console.log("Mensaje enviado: pago_completado");
+                    } else {
+                        console.log("AppInventor WebViewString no está disponible.");
+                    }
+                }, 5000);
+            }, 2500);
+        });
+    </script>
 </body>
+
 </html>
