@@ -101,30 +101,36 @@
     <h2>¡Pagament realitzat!</h2>
     <p>Gracies per la teva compra.</p>
   </div>
-
   <script>
-    const buttons = document.querySelectorAll(".options button");
-    const nextBtn = document.getElementById("nextBtn");
-    let selectedMethod = null;
+  const buttons = document.querySelectorAll(".options button");
+  const nextBtn = document.getElementById("nextBtn");
+  let selectedMethod = null;
 
-    buttons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        buttons.forEach(b => b.classList.remove("selected"));
-        btn.classList.add("selected");
-        selectedMethod = btn.dataset.method;
-        nextBtn.disabled = false;
-      });
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      buttons.forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedMethod = btn.dataset.method;
+      nextBtn.disabled = false;
     });
+  });
 
-    nextBtn.addEventListener("click", () => {
-      document.getElementById("payment-step").classList.add("hidden");
-      document.getElementById("loading-step").classList.remove("hidden");
+  nextBtn.addEventListener("click", () => {
+    document.getElementById("payment-step").classList.add("hidden");
+    document.getElementById("loading-step").classList.remove("hidden");
 
+    setTimeout(() => {
+      document.getElementById("loading-step").classList.add("hidden");
+      document.getElementById("success-step").classList.remove("hidden");
+
+      // Espera 5 segundos y luego envía mensaje a App Inventor
       setTimeout(() => {
-        document.getElementById("loading-step").classList.add("hidden");
-        document.getElementById("success-step").classList.remove("hidden");
-      }, 2500);
-    });
+        if (window.AppInventor) {
+          window.AppInventor.setWebViewString("pago_completado");
+        }
+      }, 5000);
+    }, 2500);
+  });
   </script>
 </body>
 </html>
